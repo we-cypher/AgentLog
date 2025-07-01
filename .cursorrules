@@ -125,6 +125,99 @@ await client.logAgentOutput('Here are the results...');
 - **Testing**: No testing setup yet (MVP focus)
 - **Formatting**: Prettier + ESLint (shared configs)
 
+## Design System & UI Guidelines
+
+### **Design Philosophy: "Vercel + Linear" Aesthetic**
+AgentLog follows a **clean, modern, developer-focused** design inspired by Vercel and Linear:
+
+#### **Visual Style:**
+- **Minimalist & Clean**: Lots of white space, uncluttered layouts
+- **Typography**: Inter font family, clear hierarchy
+- **Colors**: Neutral grays with purposeful accent colors
+- **Shadows**: Subtle, consistent elevation
+- **Borders**: 1px, rounded corners (6-8px radius)
+- **Dark Mode**: Full support with thoughtful contrast
+
+#### **Color Palette:**
+```css
+/* Light Mode */
+--background: #ffffff
+--foreground: #0a0a0a  
+--muted: #f1f5f9
+--border: #e2e8f0
+--accent: #3b82f6 (blue)
+--success: #10b981 (green)
+--warning: #f59e0b (orange)
+--error: #ef4444 (red)
+
+/* Dark Mode */
+--background: #0a0a0a
+--foreground: #fafafa
+--muted: #1e293b
+--border: #334155
+```
+
+#### **Component Standards:**
+
+**Buttons:**
+- Primary: Solid background, 8px radius, medium shadow
+- Secondary: Border only, same radius
+- Ghost: No background, hover state only
+- All buttons: Inter font, 14px, medium weight
+
+**Cards:**
+- White background (dark mode: dark gray)
+- 1px border, 8px radius
+- Subtle shadow: `0 1px 3px rgba(0,0,0,0.1)`
+- 16-24px padding
+
+**Event Type Colors:**
+- 💬 User Input: Blue (#3b82f6)
+- 🧠 Agent Thought: Purple (#8b5cf6)  
+- 🔧 Tool Call: Orange (#f59e0b)
+- ✅ Tool Result: Green (#10b981)
+- 📤 Agent Output: Blue (#3b82f6)
+- ❌ Error: Red (#ef4444)
+
+**Layout Patterns:**
+- Sidebar navigation (240px width)
+- Main content area with max-width constraints
+- Card-based information display
+- Timeline layouts for session replay
+- Clean tables with hover states
+
+#### **UI Package: shadcn/ui + Custom Components**
+- Use shadcn/ui as the foundation (matches Vercel/Linear aesthetic)
+- Customize with AgentLog color palette
+- Create custom components for agent-specific UI (timeline, session cards)
+- All components must follow the design system
+
+#### **Typography Scale:**
+- H1: 2.25rem (36px), font-bold
+- H2: 1.875rem (30px), font-semibold  
+- H3: 1.5rem (24px), font-semibold
+- Body: 0.875rem (14px), font-normal
+- Small: 0.75rem (12px), font-normal
+
+#### **Spacing System:**
+- 4px base unit (space-1)
+- 8px, 12px, 16px, 24px, 32px, 48px common values
+- Consistent padding and margins throughout
+
+#### **Component Creation Rules:**
+1. **Always** follow the design system color palette
+2. **Always** use Inter font family
+3. **Always** include dark mode variants
+4. **Always** use consistent border radius (6-8px)
+5. **Always** follow spacing system
+6. **Every component** should feel like it belongs in Vercel/Linear
+
+#### **Reference Components:**
+For inspiration, follow patterns from:
+- Vercel Dashboard (vercel.com/dashboard)
+- Linear App (linear.app)
+- shadcn/ui examples (ui.shadcn.com)
+
 ## Business Context
 - **Stage**: Pre-MVP, building core platform
 - **Market**: Multi-agent systems observability (growing rapidly)

@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -41,6 +44,15 @@ module.exports = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        // AgentLog Event Type Colors
+        agent: {
+          'user-input': "hsl(var(--agent-user-input))",
+          'thought': "hsl(var(--agent-thought))",
+          'tool-call': "hsl(var(--agent-tool-call))",
+          'tool-result': "hsl(var(--agent-tool-result))",
+          'output': "hsl(var(--agent-output))",
+          'error': "hsl(var(--agent-error))",
         },
       },
       borderRadius: {

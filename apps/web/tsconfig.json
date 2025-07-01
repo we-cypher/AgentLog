@@ -1,8 +1,16 @@
 {
-  "extends": "next/core-web-vitals",
   "compilerOptions": {
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "target": "ES2020",
-    "lib": ["dom", "dom.iterable", "ES2020"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "ES2020"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -16,10 +24,22 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./app/*", "./src/*"],
-      "@/components/*": ["./components/*"]
+      "@/*": [
+        "./app/*",
+        "./src/*"
+      ],
+      "@/components/*": [
+        "./components/*"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
-} 
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
