@@ -1,0 +1,151 @@
+# AgentLog - Cursor AI Rules & Context
+
+## Project Overview
+AgentLog is "The Datadog for AI Agents" - a shared-memory & observability platform for multi-agent systems.
+
+**Slogan**: "Log. Learn. Launch."
+
+**What AgentLog does (3 simple things):**
+✅ Saves everything your agents do — inputs, thoughts, tool calls, and outputs
+🧠 Gives you a dashboard to replay and debug multi-agent sessions  
+🌐 Supports MCP (Model Context Protocol) so any agent framework can plug in
+
+**Value Proposition**: Memory, visibility, and interoperability for AI agents.
+
+## Target Customers
+🏢 **Enterprise AI Teams** - Debug production agent failures and optimize workflows
+🧑‍💻 **AI Developers** - Build better agents with visibility into reasoning patterns  
+🔬 **AI Researchers** - Analyze agent behavior and multi-agent interactions
+⚡ **DevOps Teams** - Monitor and alert on agent performance like any other service
+
+## Competitive Positioning
+- **vs mem0**: They give agents memory, we give developers visibility
+- **vs LangSmith**: They monitor LangChain LLMs, we debug multi-agent workflows  
+- **vs Traditional APM**: They monitor servers, we monitor agent intelligence
+- **Unique**: Only platform with true "session replay" for agent reasoning
+
+## Tech Stack (Latest Stable Versions)
+- **Monorepo**: TurboRepo + pnpm workspaces
+- **Frontend**: Next.js 14 (App Router) + React 18 + Tailwind CSS + shadcn/ui
+- **Backend**: Express.js + TypeScript + REST API (tRPC ready)
+- **Database**: PostgreSQL 16 + Prisma ORM  
+- **Auth**: NextAuth.js + Google OAuth (JWT-based)
+- **SDK**: TypeScript client library (@agentlog/sdk)
+- **Dev Tools**: ESLint, Prettier, TypeScript, Husky, lint-staged
+- **Node**: 20+ (latest LTS)
+
+## Project Structure
+```
+agentlog/
+├─ apps/
+│  ├─ web/          # Next.js frontend 
+│  └─ api/          # Express backend
+├─ packages/
+│  ├─ sdk/          # TypeScript SDK (@agentlog/sdk)
+│  ├─ db/           # Prisma schema + client (@agentlog/db)  
+│  └─ config/       # Shared configs (ESLint, Prettier, Tailwind)
+├─ turbo.json       # TurboRepo config
+└─ README.md
+```
+
+## Database Schema (Core Models)
+```prisma
+model User {
+  id, email, name, apiKey, googleId
+  sessions: Session[]
+}
+
+model Session {
+  id, sessionId, userId, title, description  
+  user: User, events: MemoryEvent[]
+}
+
+model MemoryEvent {
+  id, sessionId, agentId, type, content, metadata, timestamp
+  session: Session
+}
+
+enum EventType {
+  USER_INPUT | AGENT_THOUGHT | TOOL_CALL | 
+  TOOL_RESULT | AGENT_OUTPUT | ERROR | SYSTEM
+}
+```
+
+## MVP Features (Current Focus)
+**✅ Must-Have (Day 1)**:
+- Basic event logging & storage
+- Simple session timeline view  
+- SDK with log() method
+- Database with Prisma schema
+- Development setup
+
+**🔄 Next Phase**:
+- API endpoints for events/sessions
+- Real-time session replay UI
+- Authentication flow
+- Multi-agent session support
+- MCP protocol integration
+
+## SDK Usage Pattern
+```typescript
+import { AgentLog } from '@agentlog/sdk';
+
+const client = new AgentLog({
+  apiKey: 'your-api-key',
+  baseUrl: 'http://localhost:3001'
+});
+
+// Core logging methods
+await client.logUserInput('Hello!');
+await client.logAgentThought('Processing request...');
+await client.logToolCall('search', 'web_search', { query: 'AI' });
+await client.logToolResult({ results: ['...'] }, 'success');
+await client.logAgentOutput('Here are the results...');
+```
+
+## Development Commands
+- `pnpm dev` - Start all apps
+- `pnpm build` - Build all packages
+- `pnpm db:push` - Push schema changes
+- `pnpm db:seed` - Seed with sample data
+- `pnpm db:studio` - Open Prisma Studio
+
+## Environment Setup
+- PostgreSQL 16+ local database
+- Node.js 20+ with pnpm 8+
+- Google OAuth credentials for auth
+- Environment variables in `.env` (see `env.example`)
+
+## Code Style & Preferences
+- **TypeScript**: Strict mode, prefer type safety
+- **React**: Functional components with hooks
+- **Styling**: Tailwind CSS + shadcn/ui components
+- **API**: REST initially, tRPC-ready for future
+- **Database**: Prisma for type-safe queries
+- **Testing**: No testing setup yet (MVP focus)
+- **Formatting**: Prettier + ESLint (shared configs)
+
+## Business Context
+- **Stage**: Pre-MVP, building core platform
+- **Market**: Multi-agent systems observability (growing rapidly)
+- **Differentiator**: Session replay for agent reasoning
+- **Monetization**: Freemium model (like Datadog)
+- **Vision**: Standard observability platform for AI agents
+
+## Integration Targets
+- **Agent Frameworks**: LangGraph, AutoGen, CrewAI, custom frameworks
+- **Protocols**: MCP (Model Context Protocol) compliance
+- **Enterprise**: SSO, compliance, SLAs for larger customers
+
+## AI Assistant Instructions
+When helping with AgentLog:
+1. **Prioritize MVP features** over advanced functionality
+2. **Use latest stable versions** of all dependencies  
+3. **Follow monorepo structure** - keep packages separate
+4. **Maintain type safety** throughout the codebase
+5. **Focus on developer experience** - this is a developer tool
+6. **Consider multi-agent workflows** in all design decisions
+7. **Keep the "session replay" vision** in mind for UX decisions
+8. **Build for scale** but ship MVP first
+
+Remember: We're building the "Datadog for AI Agents" - observability and debugging tools for the next generation of AI systems. 

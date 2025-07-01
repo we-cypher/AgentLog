@@ -1,0 +1,46 @@
+{
+  "name": "@agentlog/sdk",
+  "version": "0.1.0",
+  "description": "TypeScript SDK for AgentLog - AI agent observability platform",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist/**/*",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "lint": "eslint . --max-warnings 0",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "observability",
+    "logging",
+    "typescript",
+    "sdk"
+  ],
+  "author": "AgentLog Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@agentlog/config": "workspace:*",
+    "@types/node": "^20.10.6",
+    "eslint": "^8.56.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "axios": "^1.6.5"
+  }
+} 

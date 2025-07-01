@@ -1,0 +1,33 @@
+{
+  "name": "agentlog",
+  "private": true,
+  "description": "AgentLog - Shared-memory & observability platform for AI agents",
+  "keywords": ["ai", "agents", "observability", "logging", "memory"],
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "type-check": "turbo type-check",
+    "clean": "turbo clean",
+    "db:push": "turbo db:push",
+    "db:studio": "turbo db:studio",
+    "db:seed": "turbo db:seed"
+  },
+  "devDependencies": {
+    "@turbo/gen": "^1.11.2",
+    "turbo": "^1.11.2",
+    "prettier": "^3.1.1",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "pnpm@8.12.1",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+} 

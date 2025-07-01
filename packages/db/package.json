@@ -1,0 +1,32 @@
+{
+  "name": "@agentlog/db",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Database schema and client for AgentLog",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint . --max-warnings 0",
+    "type-check": "tsc --noEmit",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:generate": "prisma generate"
+  },
+  "devDependencies": {
+    "@agentlog/config": "workspace:*",
+    "@types/node": "^20.10.6",
+    "eslint": "^8.56.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.7.1",
+    "prisma": "^5.7.1"
+  }
+} 
