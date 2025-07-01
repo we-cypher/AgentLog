@@ -1,91 +1,107 @@
-# Phase 1: Internal Usable Milestone (2 weeks)
+# Phase 1: AgentLog Local - No Setup Required (2 weeks)
 
-**Goal**: Functional AgentLog system for founder/dev testing
+**Goal**: `npx @agentlog/local` gives developers instant AgentLog experience
 
-**Launch Criteria**: 
-- ✅ SDK can log events to database
-- ✅ Frontend displays session timeline
-- ✅ Google OAuth authentication works
-- ✅ Multi-user data isolation
-- ✅ Local development setup documented
+**Three-Tier Strategy - Tier 1**: Local development mode with SQLite, no auth, artificial limits
 
----
+**Launch Criteria**:
 
-## 🗄️ Database & Backend
-
-### Core API Endpoints
-- [ ] `POST /v1/events` - Create memory event (versioned API)
-- [ ] `GET /v1/sessions` - List user sessions  
-- [ ] `GET /v1/sessions/:sessionId/events` - Get session timeline
-- [ ] `GET /api/health` - Health check endpoint
-
-### API Design Decisions
-- [ ] **Event Ordering**: Use server timestamp + add `receivedAt` field
-- [ ] **Session Creation**: Auto-create session on first event (defer POST /sessions)
-- [ ] **API Versioning**: All endpoints under `/v1/` for future evolution
-
-### Authentication & Authorization
-- [ ] NextAuth.js Google OAuth setup
-- [ ] JWT middleware for API routes
-- [ ] User creation on first login
-- [ ] API key generation for SDK usage
-- [ ] Multi-tenant data isolation (userId filtering)
-
-### Database Schema
-- [ ] Prisma schema deployed to local PostgreSQL
-- [ ] User, Session, MemoryEvent models working
-- [ ] Database migrations working (`pnpm db:push`)
-- [ ] Foreign key relationships enforcing data integrity
-
-### Database Performance & Indexing
-- [ ] Index on `(userId, sessionId)` for session queries
-- [ ] Index on `(sessionId, createdAt)` for timeline queries
-- [ ] Seed script with 50 fake sessions for UI testing
-- [ ] Add `receivedAt` timestamp field for event ordering
-
-### Express API Server
-- [ ] CORS configured for frontend (whitelist origins)
-- [ ] Error handling middleware
-- [ ] JSON body parsing
-- [ ] Security headers with `helmet()`
-- [ ] Basic CORS protection
+- ✅ `npx @agentlog/local` starts Next.js app in 30 seconds
+- ✅ SDK can log events to local SQLite database
+- ✅ Frontend displays session timeline with real data
+- ✅ No authentication required (single user mode)
+- ✅ Artificial limits: 10 sessions, 1K events max
+- ✅ Export functionality to migrate to hosted version
 
 ---
 
-## 🎨 Frontend (Next.js)
+## 📦 AgentLog Local Package (`@agentlog/local`)
 
-### Authentication Flow
-- [ ] Google OAuth login button
-- [ ] Protected routes (redirect to login)
-- [ ] User session management
-- [ ] Logout functionality
-- [ ] Display user info (name, email)
+### NPX Package Creation
+
+- [ ] Create `packages/local/` package for npx distribution
+- [ ] CLI script that starts local Next.js server
+- [ ] Automatic port detection (3000, 3001, etc.)
+- [ ] Local SQLite database initialization
+- [ ] Browser auto-opening after startup
+
+### Local SQLite Backend
+
+- [ ] SQLite database for local storage (no PostgreSQL required)
+- [ ] Prisma schema adapted for SQLiteAdapter
+- [ ] Local API server (Next.js API routes)
+- [ ] Single-user mode (no authentication required)
+- [ ] Session auto-creation with UUIDs
+
+### Core API Endpoints (Local Mode)
+
+- [ ] `POST /api/events` - Create memory event (local SQLite)
+- [ ] `GET /api/sessions` - List all sessions (no user filtering)
+- [ ] `GET /api/sessions/[id]/events` - Get session timeline
+- [ ] `GET /api/export` - Export all data as JSON
+
+### Artificial Limits Implementation
+
+- [ ] **Session Limit**: Max 10 sessions (delete oldest when exceeded)
+- [ ] **Event Limit**: Max 1,000 events total (show warning at 800)
+- [ ] **Storage Warning**: Display when approaching limits
+- [ ] **Upgrade Prompts**: Subtle messaging about hosted version
+
+### Data Export/Migration
+
+- [ ] Export all sessions as JSON format
+- [ ] Import functionality for migrated data
+- [ ] CLI export command (`agentlog export sessions.json`)
+- [ ] Migration guide to hosted version
+
+---
+
+## 🎨 Frontend (Next.js Local Mode)
+
+### Local-First UI Features
+
+- [ ] **No Login Required**: Direct access to dashboard
+- [ ] Local storage usage indicators (sessions: 3/10, events: 247/1000)
+- [ ] Upgrade prompts when approaching limits
+- [ ] Export button for data migration
+- [ ] "Running locally" status indicator
 
 ### Session Timeline View
-- [ ] List all user sessions
+
+- [ ] List all local sessions (no user filtering)
 - [ ] Select session to view timeline
 - [ ] Display events in chronological order
 - [ ] Show event type, content, timestamp
 - [ ] Basic styling with Tailwind + shadcn/ui
 
+### Limit Management UI
+
+- [ ] Usage progress bars (sessions and events)
+- [ ] Warning messages at 80% capacity
+- [ ] Automatic cleanup of oldest sessions when at limit
+- [ ] Clear explanation of local vs hosted differences
+
 ### Core UI Components
-- [ ] Navigation header with user menu
+
+- [ ] Simple navigation header (no user menu)
 - [ ] Session list with titles/descriptions
 - [ ] Event cards with type indicators
 - [ ] Loading states and error handling
-- [ ] Responsive layout (desktop focus)
+- [ ] Export/import data controls
 
 ### Pages & Routes
+
 - [ ] `/` - Dashboard with session list
 - [ ] `/sessions/[sessionId]` - Session timeline view
-- [ ] `/api/auth/*` - NextAuth routes
-- [ ] 404 and error pages
+- [ ] `/export` - Data export/import page
+- [ ] Local mode help/upgrade page
 
 ---
 
-## 📦 SDK (@agentlog/sdk)
+## 📦 SDK (@agentlog/sdk) - Local Mode Support
 
 ### Core Logging Methods
+
 - [ ] `logUserInput()` - Log user messages
 - [ ] `logAgentThought()` - Log agent reasoning
 - [ ] `logToolCall()` - Log tool invocations
@@ -93,56 +109,72 @@
 - [ ] `logAgentOutput()` - Log agent responses
 - [ ] `log()` - Generic event logging
 
+### Local Mode Configuration
+
+- [ ] **Auto-detection**: SDK detects local AgentLog (localhost:3000)
+- [ ] **No API Key Required**: Skip authentication for local usage
+- [ ] Graceful fallback if local server not running
+- [ ] Configuration for local vs hosted modes
+- [ ] Session persistence across local restarts
+
 ### SDK Features
-- [ ] Client configuration (apiKey, baseUrl)
+
+- [ ] Client configuration (baseUrl defaulting to localhost)
 - [ ] Automatic session ID generation
 - [ ] Error handling and retries
 - [ ] TypeScript type definitions
 - [ ] Debug mode for development
+- [ ] Local mode detection and messaging
 
 ### SDK Distribution
+
 - [ ] Build system working (tsup)
 - [ ] ESM and CJS exports
 - [ ] TypeScript declarations
 - [ ] Package.json exports configured
-- [ ] Local linking for testing (`pnpm link`)
+- [ ] NPM publishing for @agentlog/sdk
 
-### SDK Testing
-- [ ] Jest unit tests for `log()` happy path
-- [ ] Error handling test cases
+### SDK Testing with Local Mode
+
+- [ ] Jest unit tests for local mode detection
+- [ ] Error handling when local server down
 - [ ] TypeScript compilation tests
-- [ ] Mock API server for testing
+- [ ] Integration tests with local SQLite
 
 ---
 
-## 🛠️ Development Setup
+## 🛠️ Development Setup (Local-First)
 
 ### Monorepo Configuration
+
 - [ ] TurboRepo pipeline working
 - [ ] pnpm workspaces configured
 - [ ] Cross-package dependencies resolved
-- [ ] `pnpm dev` starts all apps
+- [ ] `pnpm dev:local` starts local package
 - [ ] `pnpm build` builds all packages
 
-### Database Setup
-- [ ] Local PostgreSQL installation guide
-- [ ] Environment variables documented
-- [ ] Database creation scripts
-- [ ] Connection testing commands
-- [ ] Prisma Studio access
+### Local Package Setup
+
+- [ ] **No Database Required**: SQLite embedded in package
+- [ ] Minimal environment variables
+- [ ] Automatic SQLite initialization
+- [ ] Hot reload for local development
+- [ ] Package bundling for npx distribution
 
 ### Development Commands
-- [ ] `pnpm dev` - Start all development servers
-- [ ] `pnpm build` - Build all packages
-- [ ] `pnpm db:push` - Apply schema changes
-- [ ] `pnpm db:seed` - Populate test data
-- [ ] `pnpm db:studio` - Open database GUI
+
+- [ ] `pnpm dev:local` - Start local AgentLog package
+- [ ] `pnpm build:local` - Build npx package
+- [ ] `pnpm pack:local` - Package for npx testing
+- [ ] `npx @agentlog/local` - Test npx installation
+- [ ] SQLite browser for debugging (optional)
 
 ---
 
 ## 📚 Documentation
 
 ### README Updates
+
 - [ ] Complete setup instructions
 - [ ] Prerequisites clearly listed
 - [ ] Environment variable configuration
@@ -150,6 +182,7 @@
 - [ ] Troubleshooting section
 
 ### SDK Documentation
+
 - [ ] Basic usage examples
 - [ ] API reference for all methods
 - [ ] Configuration options
@@ -161,6 +194,7 @@
 ## 🧪 Testing Strategy
 
 ### Unit Testing
+
 - [ ] Jest setup for SDK package
 - [ ] Supertest setup for API testing
 - [ ] Test database configuration
@@ -170,55 +204,68 @@
 
 ## ✅ Testing & Validation
 
-### Manual Testing Checklist
-- [ ] User can sign in with Google
-- [ ] SDK can log different event types
-- [ ] Events appear in frontend timeline
-- [ ] Multiple users have isolated data
-- [ ] All development commands work
-- [ ] Error states display properly
+### Manual Testing Checklist (Local Mode)
+
+- [ ] `npx @agentlog/local` starts successfully in 30 seconds
+- [ ] SDK can log different event types to local SQLite
+- [ ] Events appear in frontend timeline immediately
+- [ ] Session limits work (10 sessions max)
+- [ ] Event limits work (1000 events max)
+- [ ] Export functionality works
+- [ ] Upgrade prompts appear at appropriate times
 
 ### Integration Testing
-- [ ] SDK → API → Database flow
-- [ ] Authentication protects API routes
+
+- [ ] SDK → Local API → SQLite flow
+- [ ] No authentication required (local mode)
 - [ ] Session creation and event logging
 - [ ] Frontend displays real SDK data
-- [ ] Multiple browser sessions work
+- [ ] Browser restart preserves data
+- [ ] Multiple local instances work independently
 
-### Performance Baseline
-- [ ] API responds under 500ms
-- [ ] Frontend loads under 2s
-- [ ] Database queries are indexed
-- [ ] No N+1 query problems
-- [ ] Memory usage is reasonable
+### Performance Baseline (Local)
+
+- [ ] Startup completes under 30 seconds
+- [ ] Frontend loads under 2 seconds
+- [ ] SQLite queries respond under 100ms
+- [ ] No memory leaks in long sessions
+- [ ] Package size under 50MB
 
 ---
 
 ## 🚀 Launch Criteria
 
 **Phase 1 Complete When:**
-- ✅ Founder can demo complete user flow
-- ✅ SDK logs events that appear in UI
-- ✅ Authentication and authorization work
-- ✅ Codebase is documented and runnable
-- ✅ No critical bugs in happy path
-- ✅ Ready for early developer testing
+
+- ✅ `npx @agentlog/local` works in 30 seconds on any machine
+- ✅ SDK logs events that appear in local UI
+- ✅ No setup or authentication required
+- ✅ Artificial limits and upgrade prompts work
+- ✅ Export functionality enables migration
+- ✅ Ready for developer community testing
 
 **Handoff to Phase 2:**
-- Working system with basic observability features
-- Stable foundation for adding MCP support
-- Clear developer documentation for contributors
+
+- Local AgentLog is the easiest way to try the product
+- Proven value proposition with instant gratification
+- Natural upgrade funnel to self-hosted/cloud versions
+- Foundation for adding advanced features
 
 ---
 
 ## 🚦 Scope Guardrails
 
 **If Phase 1 slips beyond 2 weeks:**
-- Cut extra endpoints/UI polish
-- Focus on: log + timeline + auth
-- Shipping core functionality is enough
+
+- Cut export functionality (add in Phase 2)
+- Focus on: npx → local app → log events → see timeline
+- Shipping instant value is everything
 
 **Must-Have Core:**
-- SDK can log events to database
+
+- `npx @agentlog/local` starts working app
+- SDK logs events to local SQLite
 - Frontend displays session timeline
-- Google OAuth works 
+- Limits work to drive upgrade consideration
+
+**Success Metric:** Developer can go from hearing about AgentLog to seeing their agent events in under 2 minutes.
